@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -37,39 +38,43 @@
 <body>
 
   <h1>caching-proxy</h1>
-  <p><strong>Servidor proxy com cache local</strong> desenvolvido em Node.js usando <code>Express</code> e <code>Axios</code>.</p>
+  <p><strong>Servidor proxy com cache local</strong> desenvolvido em Node.js. Redireciona requisições HTTP para um servidor de origem, armazena as respostas no disco e serve a partir do cache quando possível.</p>
 
   <h2>⚙️ Funcionalidades</h2>
   <ul>
-    <li>Redireciona requisições para um servidor de origem (como GitHub Pages).</li>
-    <li>Armazena respostas localmente em disco (cache).</li>
-    <li>Responde com <code>X-Cache: HIT</code> ou <code>MISS</code>.</li>
-    <li>Evita requisições repetidas ao servidor de origem.</li>
+    <li>Repassa requisições para um servidor de origem remoto.</li>
+    <li>Salva as respostas em disco, criando cache local.</li>
+    <li>Define cabeçalho <code>X-Cache: HIT</code> ou <code>MISS</code> na resposta.</li>
+    <li>Evita múltiplas requisições desnecessárias ao servidor remoto.</li>
   </ul>
+
+  <h2>🚀 Como usar</h2>
+  <p>Execute o script principal com os seguintes parâmetros:</p>
+
+  <pre><code>node index.js --port 3000 --origin https://exemplo.com --ttl 60</code></pre>
+
+  <ul>
+    <li><code>--port</code>: Porta onde o servidor proxy será iniciado (ex: 3000)</li>
+    <li><code>--origin</code>: URL base do servidor de origem para onde as requisições serão redirecionadas</li>
+    <li><code>--ttl</code>: Tempo de vida (em segundos) de cada entrada de cache (Time To Live)</li>
+  </ul>
+
+  <p>Depois de iniciado, você pode acessar a aplicação via navegador:</p>
+  <pre><code>http://localhost:3000</code></pre>
 
   <h2>📦 Instalação</h2>
   <pre><code>git clone https://github.com/seu-usuario/caching-proxy.git
 cd caching-proxy
 npm install</code></pre>
 
-  <h2>🚀 Como usar</h2>
-  <p>Em seu arquivo principal (<code>index.js</code>, por exemplo):</p>
-  <pre><code>const startProxyServer = require('./proxy-server');
-startProxyServer(3000, 'https://kenjilkkk.github.io');</code></pre>
-
-  <p>Depois, acesse <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> no navegador.</p>
-
-  <h2>📁 Estrutura de cache</h2>
-  <p>Os arquivos são salvos em <code>cache/&lt;host sanitizado&gt;/&lt;url_path&gt;</code>. Exemplo:</p>
+  <h2>📁 Estrutura do Cache</h2>
+  <p>As respostas são armazenadas em:</p>
+  <pre><code>cache/&lt;host&gt;/&lt;caminho&gt;</code></pre>
+  <p>Por exemplo:</p>
   <pre><code>cache/
-└── kenjilkkk.github.io/
+└── exemplo.com/
     └── index.html
-    └── assets/
-        └── main.css
     └── index.html.meta.json</code></pre>
-
-  <h2>🧠 TTL (Time to Live)</h2>
-  <p>O tempo de validade do cache é de 60 segundos (padrão), configurado diretamente no código.</p>
 
   <h2>📜 Licença</h2>
   <p>MIT License</p>
